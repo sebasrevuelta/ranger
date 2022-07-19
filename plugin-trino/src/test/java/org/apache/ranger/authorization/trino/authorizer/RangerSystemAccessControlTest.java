@@ -39,6 +39,7 @@ import org.junit.Test;
 
 import javax.security.auth.kerberos.KerberosPrincipal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -175,15 +176,15 @@ public class RangerSystemAccessControlTest {
     // check {type} / {col} replacement
     final VarcharType varcharType = VarcharType.createVarcharType(20);
 
-    Optional<ViewExpression> ret = accessControlManager.getColumnMask(context(alice), aliceTable, "cast_me", varcharType);
-    assertNotNull(ret.get());
-    assertEquals(ret.get().getExpression(), "cast cast_me as varchar(20)");
+    List<ViewExpression> ret = accessControlManager.getColumnMasks(context(alice), aliceTable, "cast_me", varcharType);
+    assertFalse(ret.isEmpty());
+    assertEquals(ret.get(0).getExpression(), "cast cast_me as varchar(20)");
 
-    ret = accessControlManager.getColumnMask(context(alice), aliceTable,"do-not-cast-me", varcharType);
-    assertFalse(ret.isPresent());
+    ret = accessControlManager.getColumnMasks(context(alice), aliceTable,"do-not-cast-me", varcharType);
+    assertTrue(ret.isEmpty());
 
-    ret = accessControlManager.getRowFilter(context(alice), aliceTable);
-    assertFalse(ret.isPresent());
+    ret = accessControlManager.getRowFilters(context(alice), aliceTable);
+    assertTrue(ret.isEmpty());
 
     accessControlManager.checkCanExecuteFunction(context(alice), functionName);
     accessControlManager.checkCanGrantExecuteFunctionPrivilege(context(alice), functionName, new TrinoPrincipal(USER, "grantee"), true);

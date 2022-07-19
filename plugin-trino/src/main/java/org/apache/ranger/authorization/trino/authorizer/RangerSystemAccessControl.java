@@ -159,8 +159,7 @@ public class RangerSystemAccessControl
     return result != null && result.isRowFilterEnabled();
   }
 
-  @Override
-  public Optional<ViewExpression> getRowFilter(SystemSecurityContext context, CatalogSchemaTableName tableName) {
+  private Optional<ViewExpression> getRowFilter(SystemSecurityContext context, CatalogSchemaTableName tableName) {
     RangerTrinoAccessRequest request = createAccessRequest(createResource(tableName), context, TrinoAccessType.SELECT);
     RangerAccessResult result = getRowFilterResult(request);
 
@@ -180,13 +179,13 @@ public class RangerSystemAccessControl
   @Override
   public List<ViewExpression> getRowFilters(SystemSecurityContext context, CatalogSchemaTableName tableName)
   {
+    // TODO{utk}: add implementation for multiple row filters
     return getRowFilter(context, tableName)
             .map(Collections::singletonList)
             .orElse(Collections.emptyList());
   }
 
-  @Override
-  public Optional<ViewExpression> getColumnMask(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type) {
+  private Optional<ViewExpression> getColumnMask(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type) {
     RangerTrinoAccessRequest request = createAccessRequest(
       createResource(tableName.getCatalogName(), tableName.getSchemaTableName().getSchemaName(),
         tableName.getSchemaTableName().getTableName(), Optional.of(columnName)),
@@ -237,6 +236,7 @@ public class RangerSystemAccessControl
   @Override
   public List<ViewExpression> getColumnMasks(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type)
   {
+    // TODO{utk}: add implementation for multiple column masks
     return getColumnMask(context, tableName, columnName, type)
             .map(Collections::singletonList)
             .orElse(Collections.emptyList());
