@@ -452,6 +452,14 @@ public class RangerSystemAccessControl
   }
 
   @Override
+  public void checkCanSetViewComment(SystemSecurityContext context, CatalogSchemaTableName view){
+    if (!hasPermission(createResource(view), context, TrinoAccessType.ALTER)) {
+      LOG.debug("RangerSystemAccessControl.checkCanSetViewComment(" + view.getSchemaTableName().getTableName() + ") denied");
+      AccessDeniedException.denyCommentView(view.getSchemaTableName().getTableName());
+    }
+  }
+
+  @Override
   public void checkCanInsertIntoTable(SystemSecurityContext context, CatalogSchemaTableName table) {
     RangerTrinoResource res = createResource(table);
     if (!hasPermission(res, context, TrinoAccessType.INSERT)) {

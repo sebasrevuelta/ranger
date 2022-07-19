@@ -263,6 +263,16 @@ public class RangerSystemAccessControl
   }
 
   @Override
+  public void checkCanSetViewComment(SystemSecurityContext context, CatalogSchemaTableName view){
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanSetViewComment(context, view);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
   public void checkCanInsertIntoTable(SystemSecurityContext context, CatalogSchemaTableName table) {
     try {
       activatePluginClassLoader();
