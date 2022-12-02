@@ -193,11 +193,19 @@
         <zookeeper.version>3.4.14</zookeeper.version>
         <codehaus.woodstox.stax2api.version>3.1.4</codehaus.woodstox.stax2api.version>
         <fasterxml.woodstox.version>5.0.3</fasterxml.woodstox.version>
-        <fasterxml.jackson.version>2.10.3</fasterxml.jackson.version>
-        <fasterxml.jackson.databind.version>2.10.3</fasterxml.jackson.databind.version>
-        <kstruct.gethostname4j.version>0.0.2</kstruct.gethostname4j.version>
-        <jna.version>5.2.0</jna.version>
-        <jna-platform.version>5.2.0</jna-platform.version>
+        <fasterxml.jackson.version>2.14.0</fasterxml.jackson.version>
+        <fasterxml.jackson.databind.version>2.14.0</fasterxml.jackson.databind.version>
+        <kstruct.gethostname4j.version>1.0.0</kstruct.gethostname4j.version>
+        <jna.version>5.7.0</jna.version>
+        <jna-platform.version>5.7.0</jna-platform.version>
+        <!-- presto plugin deps -->
+        <presto.airlift.version>0.192</presto.airlift.version>
+        <presto.bval-jsr.version>2.0.0</presto.bval-jsr.version>
+        <presto.guice.version>4.2.2</presto.guice.version>
+        <presto.guava.version>26.0-jre</presto.guava.version>
+        <presto.validation-api.version>2.0.1.Final</presto.validation-api.version>
+        <presto.re2j.version>1.1</presto.re2j.version>
+
         <!-- trino plugin deps -->
         <trino.airlift.version>0.192</trino.airlift.version>
         <trino.bval-jsr.version>2.0.0</trino.bval-jsr.version>
