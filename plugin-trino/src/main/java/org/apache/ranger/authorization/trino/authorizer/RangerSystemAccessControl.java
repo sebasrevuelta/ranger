@@ -186,7 +186,8 @@ public class RangerSystemAccessControl
             .orElse(Collections.emptyList());
   }
 
-  private Optional<ViewExpression> getColumnMask(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type) {
+  @Override
+  public Optional<ViewExpression> getColumnMask(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type) {
     RangerTrinoAccessRequest request = createAccessRequest(
       createResource(tableName.getCatalogName(), tableName.getSchemaTableName().getSchemaName(),
         tableName.getSchemaTableName().getTableName(), Optional.of(columnName)),
@@ -234,10 +235,11 @@ public class RangerSystemAccessControl
     return Optional.ofNullable(viewExpression);
   }
 
+  @Deprecated
   @Override
   public List<ViewExpression> getColumnMasks(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type)
   {
-    // TODO{utk}: add implementation for multiple column masks
+    // TODO{utk}: remove, marked as deprecated, Trino no longer supports multiple masks as of v406
     return getColumnMask(context, tableName, columnName, type)
             .map(Collections::singletonList)
             .orElse(Collections.emptyList());
@@ -352,14 +354,6 @@ public class RangerSystemAccessControl
    * Create schema is evaluated on the level of the Catalog. This means that it is assumed you have permission
    * to create a schema when you have create rights on the catalog level
    */
-
-  @Deprecated
-  @Override
-  public void checkCanCreateSchema(SystemSecurityContext context, CatalogSchemaName schema) {
-    // TODO{utk}: remove this method, marked as deprecated
-    checkCanCreateSchema(context, schema, new HashMap<String, Object>());
-  }
-
   @Override
   public void checkCanCreateSchema(SystemSecurityContext context, CatalogSchemaName schema, Map<String, Object> properties) {
     if (!hasPermission(createResource(schema.getCatalogName()), context, TrinoAccessType.CREATE)) {
