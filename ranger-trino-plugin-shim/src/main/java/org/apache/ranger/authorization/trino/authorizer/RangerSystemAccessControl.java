@@ -542,6 +542,16 @@ public class RangerSystemAccessControl
   }
 
   @Override
+  public void checkCanGrantExecuteFunctionPrivilege(SystemSecurityContext context, FunctionKind functionKind, CatalogSchemaRoutineName functionName, TrinoPrincipal grantee, boolean grantOption) {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanGrantExecuteFunctionPrivilege(context, functionKind, functionName, grantee, grantOption);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
   public void checkCanSetSchemaAuthorization(SystemSecurityContext context, CatalogSchemaName schema, TrinoPrincipal principal) {
     try {
       activatePluginClassLoader();
