@@ -96,11 +96,22 @@ public class RangerSystemAccessControl
     return filteredCatalogs;
   }
 
+  @Deprecated
   @Override
   public void checkCanCreateSchema(SystemSecurityContext context, CatalogSchemaName schema) {
     try {
       activatePluginClassLoader();
       systemAccessControlImpl.checkCanCreateSchema(context, schema);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
+  public void checkCanCreateSchema(SystemSecurityContext context, CatalogSchemaName schema, Map<String, Object> properties) {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanCreateSchema(context, schema, properties);
     } finally {
       deactivatePluginClassLoader();
     }
@@ -215,6 +226,16 @@ public class RangerSystemAccessControl
     try {
       activatePluginClassLoader();
       systemAccessControlImpl.checkCanRenameColumn(context, table);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
+  public void checkCanAlterColumn(SystemSecurityContext context, CatalogSchemaTableName table) {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanAlterColumn(context, table);
     } finally {
       deactivatePluginClassLoader();
     }
