@@ -698,6 +698,13 @@ public class RangerSystemAccessControl
   }
 
   @Override
+  public void checkCanGrantExecuteFunctionPrivilege(SystemSecurityContext context, FunctionKind functionKind, CatalogSchemaRoutineName functionName, TrinoPrincipal grantee, boolean grantOption)
+  {
+    //TODO{utk}: refactor implementation
+    checkCanGrantExecuteFunctionPrivilege(context, functionName.toString(), grantee, grantOption);
+  }
+
+  @Override
   public void checkCanExecuteFunction(SystemSecurityContext context, String function) {
     if (!hasPermission(createFunctionResource(function), context, TrinoAccessType.EXECUTE)) {
       LOG.debug("RangerSystemAccessControl.checkCanExecuteFunction(" + function + ") denied");
