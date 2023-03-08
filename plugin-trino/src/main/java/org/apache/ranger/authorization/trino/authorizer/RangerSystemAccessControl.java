@@ -246,6 +246,22 @@ public class RangerSystemAccessControl
   }
 
   @Override
+  public void checkCanCreateCatalog(SystemSecurityContext context, String catalog)
+  {
+    // TODO{utk} implementation
+    LOG.debug("RangerSystemAccessControl.checkCanCreateCatalog(" + catalog + ") denied");
+    AccessDeniedException.denyCreateCatalog(catalog);
+  }
+
+  @Override
+  public void checkCanDropCatalog(SystemSecurityContext context, String catalog)
+  {
+    // TODO{utk} implementation
+    LOG.debug("RangerSystemAccessControl.checkCanDropCatalog(" + catalog + ") denied");
+    AccessDeniedException.denyDropCatalog(catalog);
+  }
+
+  @Override
   public Set<String> filterCatalogs(SystemSecurityContext context, Set<String> catalogs) {
     LOG.debug("==> RangerSystemAccessControl.filterCatalogs("+ catalogs + ")");
     Set<String> filteredCatalogs = new HashSet<>(catalogs.size());

@@ -85,6 +85,28 @@ public class RangerSystemAccessControl
   }
 
   @Override
+  public void checkCanCreateCatalog(SystemSecurityContext context, String catalog)
+  {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanCreateCatalog(context, catalog);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
+  public void checkCanDropCatalog(SystemSecurityContext context, String catalog)
+  {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanDropCatalog(context, catalog);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
   public Set<String> filterCatalogs(SystemSecurityContext context, Set<String> catalogs) {
     Set<String> filteredCatalogs;
     try {
