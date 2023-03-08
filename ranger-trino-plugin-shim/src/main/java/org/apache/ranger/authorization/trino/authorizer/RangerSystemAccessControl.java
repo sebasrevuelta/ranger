@@ -96,17 +96,6 @@ public class RangerSystemAccessControl
     return filteredCatalogs;
   }
 
-  @Deprecated
-  @Override
-  public void checkCanCreateSchema(SystemSecurityContext context, CatalogSchemaName schema) {
-    try {
-      activatePluginClassLoader();
-      systemAccessControlImpl.checkCanCreateSchema(context, schema);
-    } finally {
-      deactivatePluginClassLoader();
-    }
-  }
-
   @Override
   public void checkCanCreateSchema(SystemSecurityContext context, CatalogSchemaName schema, Map<String, Object> properties) {
     try {
@@ -530,6 +519,20 @@ public class RangerSystemAccessControl
   }
 
 
+  @Override
+  public Optional<ViewExpression> getColumnMask(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type) {
+    Optional<ViewExpression> viewExpression;
+    try {
+      activatePluginClassLoader();
+      viewExpression = systemAccessControlImpl.getColumnMask(context, tableName, columnName, type);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+    return viewExpression;
+  }
+
+
+  @Deprecated
   @Override
   public List<ViewExpression> getColumnMasks(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type) {
     List<ViewExpression> viewExpression;
