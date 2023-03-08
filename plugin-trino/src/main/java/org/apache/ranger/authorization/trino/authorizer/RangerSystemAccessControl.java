@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -351,8 +352,16 @@ public class RangerSystemAccessControl
    * Create schema is evaluated on the level of the Catalog. This means that it is assumed you have permission
    * to create a schema when you have create rights on the catalog level
    */
+
+  @Deprecated
   @Override
   public void checkCanCreateSchema(SystemSecurityContext context, CatalogSchemaName schema) {
+    // TODO{utk}: remove this method, marked as deprecated
+    checkCanCreateSchema(context, schema, new HashMap<String, Object>());
+  }
+
+  @Override
+  public void checkCanCreateSchema(SystemSecurityContext context, CatalogSchemaName schema, Map<String, Object> properties) {
     if (!hasPermission(createResource(schema.getCatalogName()), context, TrinoAccessType.CREATE)) {
       LOG.debug("RangerSystemAccessControl.checkCanCreateSchema(" + schema.getSchemaName() + ") denied");
       AccessDeniedException.denyCreateSchema(schema.getSchemaName());
@@ -588,6 +597,15 @@ public class RangerSystemAccessControl
     if (!hasPermission(res, context, TrinoAccessType.ALTER)) {
       LOG.debug("RangerSystemAccessControl.checkCanRenameColumn(" + table.getSchemaTableName().getTableName() + ") denied");
       AccessDeniedException.denyRenameColumn(table.getSchemaTableName().getTableName());
+    }
+  }
+
+  @Override
+  public void checkCanAlterColumn(SystemSecurityContext context, CatalogSchemaTableName table) {
+    RangerTrinoResource res = createResource(table);
+    if (!hasPermission(res, context, TrinoAccessType.ALTER)) {
+      LOG.debug("RangerSystemAccessControl.checkCanAlterColumn(" + table.getSchemaTableName().getTableName() + ") denied");
+      AccessDeniedException.denyAlterColumn(table.getSchemaTableName().getTableName());
     }
   }
 
