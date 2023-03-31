@@ -602,7 +602,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.3.2</version>
                 <executions>
                     <execution>
                         <id>prepare</id>
@@ -667,6 +667,7 @@
 			<plugin>
 				<groupId>com.webcohesion.enunciate</groupId>
 				<artifactId>enunciate-maven-plugin</artifactId>
+        <version>2.15.1</version>
 				<configuration>
 					<configFile>${basedir}/../enunciate.xml</configFile>
 					<docsDir>${basedir}/../docs/target/</docsDir>
