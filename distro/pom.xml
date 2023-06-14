@@ -86,6 +86,46 @@
         </profile>
 
         <profile>
+            <id>ranger-rzp</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>${assembly.plugin.version}</version>
+                        <configuration>
+                            <finalName>ranger-${project.version}</finalName>
+                            <outputDirectory>../target</outputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <skipAssembly>false</skipAssembly>
+                                    <descriptors>
+                                        <descriptor>src/main/assembly/hive-agent.xml</descriptor>
+                                        <descriptor>src/main/assembly/admin-web.xml</descriptor>
+                                        <descriptor>src/main/assembly/solr_audit_conf.xml</descriptor>
+                                        <descriptor>src/main/assembly/usersync.xml</descriptor>
+                                        <descriptor>src/main/assembly/tagsync.xml</descriptor>
+                                        <descriptor>src/main/assembly/migration-util.xml</descriptor>
+                                        <descriptor>src/main/assembly/kms.xml</descriptor>
+                                        <descriptor>src/main/assembly/ranger-tools.xml</descriptor>
+                                        <descriptor>src/main/assembly/ranger-src.xml</descriptor>
+                                        <descriptor>src/main/assembly/plugin-atlas.xml</descriptor>
+                                        <descriptor>src/main/assembly/plugin-trino.xml</descriptor>
+                                        <descriptor>src/main/assembly/sample-client.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>ranger-jdk11</id>
             <activation>
                 <jdk>11</jdk>
@@ -730,7 +770,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.ranger</groupId>
-            <artifactId>ranger-elasticsearch-plugin-shim</artifactId>
+            <artifactId>ranger-trino-plugin-shim</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -327,6 +327,45 @@
         </profile>
 
         <profile>
+            <id>ranger-rzp</id>
+            <modules>
+                <module>jisql</module>
+                <module>agents-audit</module>
+                <module>agents-common</module>
+                <module>agents-cred</module>
+                <module>intg</module>
+                <module>agents-installer</module>
+                <module>credentialbuilder</module>
+                <module>embeddedwebserver</module>
+                <module>kms</module>
+                <module>hive-agent</module>
+                <module>security-admin</module>
+                <module>plugin-trino</module>
+                <module>ugsync-util</module>
+                <module>ugsync</module>
+                <module>ugsync/ldapconfigchecktool/ldapconfigcheck</module>
+                <module>unixauthclient</module>
+                <module>unixauthservice</module>
+                <module>ranger-util</module>
+                <module>plugin-kms</module>
+                <module>tagsync</module>
+                <module>ranger-plugin-classloader</module>
+                <module>ranger-hive-plugin-shim</module>
+                <module>ranger-atlas-plugin-shim</module>
+                <module>ranger-kms-plugin-shim</module>
+                <module>ranger-trino-plugin-shim</module>
+                <module>ranger-examples</module>
+                <module>ranger-tools</module>
+                <module>plugin-atlas</module>
+                <!--
+                   'distro' should be the last module. If a module gets inserted after
+                   ranger-elasticsearch-plugin-shim, make sure to update dependency in distro/pom.xml
+                -->
+                <module>distro</module>
+            </modules>
+        </profile>
+
+        <profile>
             <id>ranger-jdk11</id>
             <activation>
                <jdk>11</jdk>

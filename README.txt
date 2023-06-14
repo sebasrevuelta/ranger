@@ -62,6 +62,20 @@ Build Process
    ranger-<version>-presto-plugin.tar.gz
    ranger-<version>-schema-registry-plugin.tar.gz
 
+
+Razorpay Build Process
+============================================
+
+1. Execute following from the root folder
+
+    $ mvn -P'ranger-rzp,!ranger-jdk11,!linux' -DskipTests=true clean package \
+        -Dmaven.artifact.threads=20 \
+        -Dhttp.keepAlive=false \
+        -Dmaven.wagon.http.pool=false \
+        -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+        --batch-mode \
+        -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+
 Importing Apache Ranger Project into Eclipse
 ============================================
 
