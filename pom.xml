@@ -353,13 +353,13 @@
                 <module>ranger-hive-plugin-shim</module>
                 <module>ranger-atlas-plugin-shim</module>
                 <module>ranger-kms-plugin-shim</module>
-                <module>ranger-trino-plugin-shim</module>
                 <module>ranger-examples</module>
                 <module>ranger-tools</module>
                 <module>plugin-atlas</module>
+                <module>ranger-trino-plugin-shim</module>
                 <!--
                    'distro' should be the last module. If a module gets inserted after
-                   ranger-elasticsearch-plugin-shim, make sure to update dependency in distro/pom.xml
+                   ranger-trino-plugin-shim, make sure to update dependency in distro/pom.xml
                 -->
                 <module>distro</module>
             </modules>
