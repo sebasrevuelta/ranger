@@ -405,8 +405,8 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public Set<String> filterViewQueryOwnedBy(SystemSecurityContext context, Set<String> queryOwners) {
-    Set<String> filteredQueryOwners;
+  public Collection<Identity> filterViewQueryOwnedBy(SystemSecurityContext context, Collection<Identity> queryOwners) {
+    Collection<Identity> filteredQueryOwners;
     try {
       activatePluginClassLoader();
       filteredQueryOwners = systemAccessControlImpl.filterViewQueryOwnedBy(context, queryOwners);
@@ -547,20 +547,6 @@ public class RangerSystemAccessControl
     try {
       activatePluginClassLoader();
       viewExpression = systemAccessControlImpl.getColumnMask(context, tableName, columnName, type);
-    } finally {
-      deactivatePluginClassLoader();
-    }
-    return viewExpression;
-  }
-
-
-  @Deprecated
-  @Override
-  public List<ViewExpression> getColumnMasks(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type) {
-    List<ViewExpression> viewExpression;
-    try {
-      activatePluginClassLoader();
-      viewExpression = systemAccessControlImpl.getColumnMasks(context, tableName, columnName, type);
     } finally {
       deactivatePluginClassLoader();
     }
