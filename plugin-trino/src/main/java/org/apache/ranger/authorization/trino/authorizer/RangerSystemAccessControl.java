@@ -50,8 +50,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -233,16 +233,6 @@ public class RangerSystemAccessControl
     }
 
     return Optional.ofNullable(viewExpression);
-  }
-
-  @Deprecated
-  @Override
-  public List<ViewExpression> getColumnMasks(SystemSecurityContext context, CatalogSchemaTableName tableName, String columnName, Type type)
-  {
-    // TODO{utk}: remove, marked as deprecated, Trino no longer supports multiple masks as of v406
-    return getColumnMask(context, tableName, columnName, type)
-            .map(Collections::singletonList)
-            .orElse(Collections.emptyList());
   }
 
   @Override
@@ -688,7 +678,7 @@ public class RangerSystemAccessControl
    * This is a NOOP, no filtering is applied
    */
   @Override
-  public Set<String> filterViewQueryOwnedBy(SystemSecurityContext context, Set<String> queryOwners) {
+  public Collection<Identity> filterViewQueryOwnedBy(SystemSecurityContext context, Collection<Identity> queryOwners) {
     return queryOwners;
   }
 

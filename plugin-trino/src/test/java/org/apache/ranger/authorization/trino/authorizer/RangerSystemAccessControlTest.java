@@ -28,6 +28,7 @@ import io.trino.spi.security.Identity;
 import io.trino.spi.security.TrinoPrincipal;
 import io.trino.spi.security.SystemSecurityContext;
 
+import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.trino.spi.security.PrincipalType.USER;
 import static io.trino.spi.security.Privilege.SELECT;
 import static org.junit.Assert.*;
@@ -171,20 +172,25 @@ public class RangerSystemAccessControlTest {
   @SuppressWarnings("PMD")
   public void testMisc()
   {
-    assertEquals(accessControlManager.filterViewQueryOwnedBy(context(alice), queryOwners), queryOwners);
+    assertEquals(
+            accessControlManager.filterViewQueryOwnedBy(
+                    context(alice),
+                    queryOwners.stream().map(Identity::ofUser).collect(toImmutableSet())),
+            queryOwners.stream().map(Identity::ofUser).collect(toImmutableSet())
+    );
 
     // check {type} / {col} replacement
     final VarcharType varcharType = VarcharType.createVarcharType(20);
 
-    List<ViewExpression> ret = accessControlManager.getColumnMasks(context(alice), aliceTable, "cast_me", varcharType);
-    assertFalse(ret.isEmpty());
-    assertEquals(ret.get(0).getExpression(), "cast cast_me as varchar(20)");
+    Optional<ViewExpression> ret = accessControlManager.getColumnMask(context(alice), aliceTable, "cast_me", varcharType);
+    assertTrue(ret.isPresent());
+    assertEquals(ret.get().getExpression(), "cast cast_me as varchar(20)");
 
-    ret = accessControlManager.getColumnMasks(context(alice), aliceTable,"do-not-cast-me", varcharType);
-    assertTrue(ret.isEmpty());
+    ret = accessControlManager.getColumnMask(context(alice), aliceTable,"do-not-cast-me", varcharType);
+    assertFalse(ret.isPresent());
 
-    ret = accessControlManager.getRowFilters(context(alice), aliceTable);
-    assertTrue(ret.isEmpty());
+    List<ViewExpression> ret2 = accessControlManager.getRowFilters(context(alice), aliceTable);
+    assertTrue(ret2.isEmpty());
 
     accessControlManager.checkCanExecuteFunction(context(alice), functionName);
     accessControlManager.checkCanGrantExecuteFunctionPrivilege(context(alice), functionName, new TrinoPrincipal(USER, "grantee"), true);
