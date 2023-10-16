@@ -19,6 +19,7 @@ package org.apache.ranger.authorization.trino.authorizer;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import io.trino.spi.QueryId;
 import io.trino.spi.connector.CatalogSchemaName;
 import io.trino.spi.connector.CatalogSchemaRoutineName;
 import io.trino.spi.connector.CatalogSchemaTableName;
@@ -39,6 +40,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.security.auth.kerberos.KerberosPrincipal;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,16 +79,16 @@ public class RangerSystemAccessControlTest {
   @SuppressWarnings("PMD")
   public void testCanSetUserOperations() {
     try {
-      accessControlManager.checkCanImpersonateUser(context(alice), bob.getUser());
+      accessControlManager.checkCanImpersonateUser(alice, bob.getUser());
       throw new AssertionError("expected AccessDeniedExeption");
     }
     catch (AccessDeniedException expected) {
     }
 
-    accessControlManager.checkCanImpersonateUser(context(admin), bob.getUser());
+    accessControlManager.checkCanImpersonateUser(admin, bob.getUser());
 
     try {
-      accessControlManager.checkCanImpersonateUser(context(kerberosInvalidAlice), bob.getUser());
+      accessControlManager.checkCanImpersonateUser(kerberosInvalidAlice, bob.getUser());
       throw new AssertionError("expected AccessDeniedExeption");
     }
     catch (AccessDeniedException expected) {
@@ -174,7 +176,7 @@ public class RangerSystemAccessControlTest {
   {
     assertEquals(
             accessControlManager.filterViewQueryOwnedBy(
-                    context(alice),
+                    alice,
                     queryOwners.stream().map(Identity::ofUser).collect(toImmutableSet())),
             queryOwners.stream().map(Identity::ofUser).collect(toImmutableSet())
     );
@@ -197,7 +199,8 @@ public class RangerSystemAccessControlTest {
     accessControlManager.checkCanExecuteProcedure(context(alice), aliceProcedure);
   }
 
+  // TODO: Fix it
   private SystemSecurityContext context(Identity id) {
-    return new SystemSecurityContext(id, Optional.empty());
+    return new SystemSecurityContext(id, QueryId.valueOf("dummy"), Instant.now());
   }
 }
