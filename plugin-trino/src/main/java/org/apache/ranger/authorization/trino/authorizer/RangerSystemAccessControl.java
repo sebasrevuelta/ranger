@@ -674,6 +674,7 @@ public class RangerSystemAccessControl
    */
   @Override
   public void checkCanExecuteQuery(SystemSecurityContext context) {
+    LOG.debug("RangerSystemAccessControl.checkCanExecuteQuery(" + context.getIdentity() + ") invoked");
   }
 
   @Override
