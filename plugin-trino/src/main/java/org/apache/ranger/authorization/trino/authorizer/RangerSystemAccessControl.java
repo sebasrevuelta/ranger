@@ -41,8 +41,7 @@ import org.apache.ranger.plugin.policyengine.RangerAccessRequestImpl;
 import org.apache.ranger.plugin.policyengine.RangerAccessResourceImpl;
 import org.apache.ranger.plugin.policyengine.RangerAccessResult;
 import org.apache.ranger.plugin.service.RangerBasePlugin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.airlift.log.Logger;
 
 import java.io.IOException;
 import java.net.URL;
@@ -62,7 +61,7 @@ import static java.util.Locale.ENGLISH;
 
 public class RangerSystemAccessControl
   implements SystemAccessControl {
-  private static Logger LOG = LoggerFactory.getLogger(RangerSystemAccessControl.class);
+  private static final Logger LOG = Logger.get(RangerSystemAccessControl.class);
 
   final public static String RANGER_CONFIG_KEYTAB = "ranger.keytab";
   final public static String RANGER_CONFIG_PRINCIPAL = "ranger.principal";
