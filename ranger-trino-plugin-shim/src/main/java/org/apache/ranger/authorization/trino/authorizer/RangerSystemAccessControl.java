@@ -17,7 +17,6 @@ import io.trino.spi.connector.CatalogSchemaName;
 import io.trino.spi.connector.CatalogSchemaRoutineName;
 import io.trino.spi.connector.CatalogSchemaTableName;
 import io.trino.spi.connector.SchemaTableName;
-import io.trino.spi.function.FunctionKind;
 import io.trino.spi.security.*;
 import io.trino.spi.type.Type;
 import org.apache.ranger.plugin.classloader.RangerPluginClassLoader;
@@ -75,10 +74,10 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanAccessCatalog(SystemSecurityContext context, String catalogName) {
+  public boolean canAccessCatalog(SystemSecurityContext context, String catalogName) {
     try {
       activatePluginClassLoader();
-      systemAccessControlImpl.checkCanAccessCatalog(context, catalogName);
+      return systemAccessControlImpl.canAccessCatalog(context, catalogName);
     } finally {
       deactivatePluginClassLoader();
     }
@@ -564,26 +563,6 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanGrantExecuteFunctionPrivilege(SystemSecurityContext context, String functionName, TrinoPrincipal grantee, boolean grantOption) {
-    try {
-      activatePluginClassLoader();
-      systemAccessControlImpl.checkCanGrantExecuteFunctionPrivilege(context, functionName, grantee, grantOption);
-    } finally {
-      deactivatePluginClassLoader();
-    }
-  }
-
-  @Override
-  public void checkCanGrantExecuteFunctionPrivilege(SystemSecurityContext context, FunctionKind functionKind, CatalogSchemaRoutineName functionName, TrinoPrincipal grantee, boolean grantOption) {
-    try {
-      activatePluginClassLoader();
-      systemAccessControlImpl.checkCanGrantExecuteFunctionPrivilege(context, functionKind, functionName, grantee, grantOption);
-    } finally {
-      deactivatePluginClassLoader();
-    }
-  }
-
-  @Override
   public void checkCanSetSchemaAuthorization(SystemSecurityContext context, CatalogSchemaName schema, TrinoPrincipal principal) {
     try {
       activatePluginClassLoader();
@@ -624,20 +603,22 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanExecuteFunction(SystemSecurityContext systemSecurityContext, String functionName) {
+  public boolean canExecuteFunction(SystemSecurityContext systemSecurityContext, CatalogSchemaRoutineName functionName) {
     try {
       activatePluginClassLoader();
-      systemAccessControlImpl.checkCanExecuteFunction(systemSecurityContext, functionName);
+      return systemAccessControlImpl.canExecuteFunction(systemSecurityContext, functionName);
     } finally {
       deactivatePluginClassLoader();
     }
   }
 
   @Override
-  public void checkCanExecuteFunction(SystemSecurityContext systemSecurityContext, FunctionKind functionKind, CatalogSchemaRoutineName functionName) {
+  public void checkCanShowFunctions(SystemSecurityContext systemSecurityContext, CatalogSchemaName schema)
+  {
+    // TODO: Override `filterFunctions` for filtering functions for unauthorized users. Check function comments in `super.checkCanShowFunctions`.
     try {
       activatePluginClassLoader();
-      systemAccessControlImpl.checkCanExecuteFunction(systemSecurityContext, functionKind, functionName);
+      systemAccessControlImpl.checkCanShowFunctions(systemSecurityContext, schema);
     } finally {
       deactivatePluginClassLoader();
     }

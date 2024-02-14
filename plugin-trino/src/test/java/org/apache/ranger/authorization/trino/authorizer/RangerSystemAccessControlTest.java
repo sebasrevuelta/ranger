@@ -20,10 +20,7 @@ package org.apache.ranger.authorization.trino.authorizer;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.trino.spi.QueryId;
-import io.trino.spi.connector.CatalogSchemaName;
-import io.trino.spi.connector.CatalogSchemaRoutineName;
-import io.trino.spi.connector.CatalogSchemaTableName;
-import io.trino.spi.connector.SchemaTableName;
+import io.trino.spi.connector.*;
 import io.trino.spi.security.AccessDeniedException;
 import io.trino.spi.security.Identity;
 import io.trino.spi.security.TrinoPrincipal;
@@ -194,8 +191,8 @@ public class RangerSystemAccessControlTest {
     List<ViewExpression> ret2 = accessControlManager.getRowFilters(context(alice), aliceTable);
     assertTrue(ret2.isEmpty());
 
-    accessControlManager.checkCanExecuteFunction(context(alice), functionName);
-    accessControlManager.checkCanGrantExecuteFunctionPrivilege(context(alice), functionName, new TrinoPrincipal(USER, "grantee"), true);
+    accessControlManager.canExecuteFunction(context(alice), aliceProcedure);
+//    accessControlManager.checkCanGrantExecuteFunctionPrivilege(context(alice), functionName, new TrinoPrincipal(USER, "grantee"), true);
     accessControlManager.checkCanExecuteProcedure(context(alice), aliceProcedure);
   }
 
