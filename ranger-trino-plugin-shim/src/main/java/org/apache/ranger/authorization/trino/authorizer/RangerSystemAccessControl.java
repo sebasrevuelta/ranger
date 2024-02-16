@@ -16,6 +16,8 @@ package org.apache.ranger.authorization.trino.authorizer;
 import io.trino.spi.connector.CatalogSchemaName;
 import io.trino.spi.connector.CatalogSchemaRoutineName;
 import io.trino.spi.connector.CatalogSchemaTableName;
+import io.trino.spi.connector.EntityKindAndName;
+import io.trino.spi.connector.EntityPrivilege;
 import io.trino.spi.connector.SchemaTableName;
 import io.trino.spi.security.*;
 import io.trino.spi.type.Type;
@@ -522,6 +524,39 @@ public class RangerSystemAccessControl
     try {
       activatePluginClassLoader();
       systemAccessControlImpl.checkCanRevokeTablePrivilege(context, privilege, table, revokee, grantOptionFor);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
+  public void checkCanGrantEntityPrivilege(SystemSecurityContext context, EntityPrivilege privilege, EntityKindAndName entity, TrinoPrincipal grantee, boolean grantOption)
+  {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanGrantEntityPrivilege(context, privilege, entity, grantee, grantOption);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
+  public void checkCanDenyEntityPrivilege(SystemSecurityContext context, EntityPrivilege privilege, EntityKindAndName entity, TrinoPrincipal grantee)
+  {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanDenyEntityPrivilege(context, privilege, entity, grantee);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
+  public void checkCanRevokeEntityPrivilege(SystemSecurityContext context, EntityPrivilege privilege, EntityKindAndName entity, TrinoPrincipal revokee, boolean grantOption)
+  {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanRevokeEntityPrivilege(context, privilege, entity, revokee, grantOption);
     } finally {
       deactivatePluginClassLoader();
     }

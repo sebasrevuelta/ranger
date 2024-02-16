@@ -21,6 +21,8 @@ package org.apache.ranger.authorization.trino.authorizer;
 import io.trino.spi.connector.CatalogSchemaName;
 import io.trino.spi.connector.CatalogSchemaRoutineName;
 import io.trino.spi.connector.CatalogSchemaTableName;
+import io.trino.spi.connector.EntityKindAndName;
+import io.trino.spi.connector.EntityPrivilege;
 import io.trino.spi.connector.SchemaTableName;
 import io.trino.spi.security.AccessDeniedException;
 import io.trino.spi.security.Identity;
@@ -506,6 +508,24 @@ public class RangerSystemAccessControl
       LOG.debug("RangerSystemAccessControl.checkCanRevokeTablePrivilege(" + table + ") denied");
       AccessDeniedException.denyRevokeTablePrivilege(privilege.toString(), table.toString());
     }
+  }
+
+  @Override
+  public void checkCanGrantEntityPrivilege(SystemSecurityContext context, EntityPrivilege privilege, EntityKindAndName entity, TrinoPrincipal grantee, boolean grantOption)
+  {
+    AccessDeniedException.denyGrantEntityPrivilege(privilege.toString(), entity);
+  }
+
+  @Override
+  public void checkCanDenyEntityPrivilege(SystemSecurityContext context, EntityPrivilege privilege, EntityKindAndName entity, TrinoPrincipal grantee)
+  {
+    AccessDeniedException.denyDenyEntityPrivilege(privilege.toString(), entity);
+  }
+
+  @Override
+  public void checkCanRevokeEntityPrivilege(SystemSecurityContext context, EntityPrivilege privilege, EntityKindAndName entity, TrinoPrincipal revokee, boolean grantOption)
+  {
+    AccessDeniedException.denyRevokeEntityPrivilege(privilege.toString(), entity);
   }
 
   @Override
