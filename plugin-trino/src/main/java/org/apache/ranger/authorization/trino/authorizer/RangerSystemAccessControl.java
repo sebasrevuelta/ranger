@@ -24,6 +24,7 @@ import io.trino.spi.connector.CatalogSchemaTableName;
 import io.trino.spi.connector.EntityKindAndName;
 import io.trino.spi.connector.EntityPrivilege;
 import io.trino.spi.connector.SchemaTableName;
+import io.trino.spi.QueryId;
 import io.trino.spi.security.AccessDeniedException;
 import io.trino.spi.security.Identity;
 import io.trino.spi.security.TrinoPrincipal;
@@ -292,6 +293,15 @@ public class RangerSystemAccessControl
 
   /** SYSTEM **/
 
+  @Override
+  public void checkCanSetSystemSessionProperty(Identity identity, QueryId queryId, String propertyName) {
+    if (!hasPermission(createSystemPropertyResource(propertyName), identity, TrinoAccessType.ALTER)) {
+      LOG.debug("RangerSystemAccessControl.checkCanSetSystemSessionProperty denied");
+      AccessDeniedException.denySetSystemSessionProperty(propertyName);
+    }
+  }
+
+  @Deprecated
   @Override
   public void checkCanSetSystemSessionProperty(Identity identity, String propertyName) {
     if (!hasPermission(createSystemPropertyResource(propertyName), identity, TrinoAccessType.ALTER)) {
@@ -681,6 +691,12 @@ public class RangerSystemAccessControl
    * This is a NOOP. Everyone can execute a query
    * @param identity
    */
+  @Override
+  public void checkCanExecuteQuery(Identity identity, QueryId queryId) {
+    LOG.debug("RangerSystemAccessControl.checkCanExecuteQuery(" + identity + ") invoked");
+  }
+
+  @Deprecated
   @Override
   public void checkCanExecuteQuery(Identity identity) {
     LOG.debug("RangerSystemAccessControl.checkCanExecuteQuery(" + identity + ") invoked");
