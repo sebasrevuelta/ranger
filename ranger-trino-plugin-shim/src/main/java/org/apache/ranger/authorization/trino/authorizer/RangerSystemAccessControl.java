@@ -19,6 +19,7 @@ import io.trino.spi.connector.CatalogSchemaTableName;
 import io.trino.spi.connector.EntityKindAndName;
 import io.trino.spi.connector.EntityPrivilege;
 import io.trino.spi.connector.SchemaTableName;
+import io.trino.spi.QueryId;
 import io.trino.spi.security.*;
 import io.trino.spi.type.Type;
 import org.apache.ranger.plugin.classloader.RangerPluginClassLoader;
@@ -65,11 +66,22 @@ public class RangerSystemAccessControl
     }
   }
 
+  @Deprecated
   @Override
   public void checkCanSetSystemSessionProperty(Identity identity, String propertyName) {
     try {
       activatePluginClassLoader();
       systemAccessControlImpl.checkCanSetSystemSessionProperty(identity, propertyName);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
+  public void checkCanSetSystemSessionProperty(Identity identity, QueryId queryId, String propertyName) {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanSetSystemSessionProperty(identity, queryId, propertyName);
     } finally {
       deactivatePluginClassLoader();
     }
@@ -385,11 +397,22 @@ public class RangerSystemAccessControl
     }
   }
 
+  @Deprecated
   @Override
   public void checkCanExecuteQuery(Identity identity) {
     try {
       activatePluginClassLoader();
       systemAccessControlImpl.checkCanExecuteQuery(identity);
+    } finally {
+      deactivatePluginClassLoader();
+    }
+  }
+
+  @Override
+  public void checkCanExecuteQuery(Identity identity, QueryId queryId) {
+    try {
+      activatePluginClassLoader();
+      systemAccessControlImpl.checkCanExecuteQuery(identity, queryId);
     } finally {
       deactivatePluginClassLoader();
     }
